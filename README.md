@@ -13,9 +13,9 @@ npm inatall
 
 PORT = 5001
 
-# Instead of [``] write your Mongo db Api key
-# [``] ning o'rniga o'zingizning Mongo db Api key yingizni yozing
+# Inside of `` write your Mongo db Api key
+# `` ning ichiga o'zingizning Mongo db Api key yingizni yozing
 
-MONGODB = [`Mongo db Api key`]
+MONGODB = `Mongo db Api key`
 
 JWT_KEY = xisyugoi867ygohi7
