@@ -1,6 +1,7 @@
 const User = require('../model/auth')
 const generateToken = require('../config/jwtToken')
 const expressAsyncHandler = require('express-async-handler')
+const validateMongodbId = require('../util/validateMongodbID.js')
 
 
 
@@ -18,25 +19,26 @@ const userRegisterCtrl = expressAsyncHandler(async (req,res) => {
 
     const current = userExist ? false : true
 
-    if (userExist) {
-        res.status(400).json({current,message})
-    } 
-    
-    try {
-
-        const user = await User.create({
-
-            firstName:req?.body?.firstName,
-            lastName:req?.body?.lastName,
-            email:req?.body?.email,
-            password:req?.body?.password
-        })
-        res.json({user,current,message})
-
-    } catch (error) {
-      return res.status(400).json(error.errors)
-
+    if (!userExist) {
+      try {
+  
+          const user = await User.create({
+  
+              firstName:req?.body?.firstName,
+              lastName:req?.body?.lastName,
+              email:req?.body?.email,
+              password:req?.body?.password
+          })
+          res.json({user,current,message})
+  
+      } catch (error) {
+        return res.status(400).json(error.errors)
+  
+      }
+    } else{
+      res.status(400).json({current,message})
     }
+    
     })
 
 //----------------------------------------
@@ -47,6 +49,7 @@ const userLoginCtrl = expressAsyncHandler(async (req,res) => {
 
     const {email,password} = req?.body
 
+    console.log(req.user)
     const userFound = await User.findOne({ email })
 
     if (userFound && (await userFound.isPasswordMatched(password))) {
@@ -115,6 +118,7 @@ const userProfileCtrl = expressAsyncHandler(async (req, res) => {
   
   const updateUserCtrl = expressAsyncHandler(async (req, res) => {
     const { _id } = req?.user;
+    console.log(req.user)
     validateMongodbId(_id);
     const user = await User.findByIdAndUpdate(
       _id,

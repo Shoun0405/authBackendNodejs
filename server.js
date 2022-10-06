@@ -18,7 +18,7 @@ app.use('/api/auth', authRouts)
 
 const PORT = process.env.PORT
 
-console.log(process.env.NODE_ENV)
+// console.log(process.env.NODE_ENV)
 
 app.use(notFound)
 app.use(errorHandler)
